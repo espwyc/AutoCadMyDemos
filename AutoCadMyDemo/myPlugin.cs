@@ -43,6 +43,7 @@ namespace AutoCadMyDemo
             MyCommands myCommands = new MyCommands();
             myCommands.MyMenu();
             myCommands.MyRibbonTab();
+            myCommands.MyHook();
             //myCommands.OpenWindow();
 
         }

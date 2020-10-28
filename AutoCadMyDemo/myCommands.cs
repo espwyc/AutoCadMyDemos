@@ -34,9 +34,20 @@ namespace AutoCadMyDemo
         // context menu.
 
         //自定义控件
-      
 
 
+        //通用资源
+        private AcadApplication app = (AcadApplication)Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication;
+        Document doc = Application.DocumentManager.MdiActiveDocument;
+
+        //自定义功能组件
+        private void WriteMessage(String s)
+        {
+            Document doc = Application.DocumentManager.MdiActiveDocument;
+            doc.Editor.WriteMessage(s);
+        }
+
+        //命令
         // Modal Command with localized name
         [CommandMethod("MyGroup", "MyCommand", "MyCommandLocal", CommandFlags.Modal)]
         public void MyCommand() // This method can have any name
@@ -76,6 +87,14 @@ namespace AutoCadMyDemo
             }
 
             w.ShowDialog();
+            if (w.Flag == 1)
+            {
+                MyHook();
+            }
+            if (w.Flag == 2)
+            {
+
+            }
               
         }
 
@@ -163,9 +182,6 @@ namespace AutoCadMyDemo
             // Return a value to the AutoCAD Lisp Interpreter
             return 1;
         }
-
-
-
     }
 
 }

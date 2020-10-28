@@ -15,7 +15,7 @@ namespace AutoCadMyDemo
         public void MyMenu()
         {
             //获取CAD应用程序
-            AcadApplication app = (AcadApplication)Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication;
+            
             AcadPopupMenus menus = app.MenuGroups.Item(0).Menus;
             foreach (AcadPopupMenu menu in menus)
             {
@@ -46,7 +46,7 @@ namespace AutoCadMyDemo
         [CommandMethod("DeleteMenu")]
         public void DeleteMenu()
         {
-            AcadApplication app = (AcadApplication)Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication;
+            //AcadApplication app = (AcadApplication)Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication;
             foreach (AcadPopupMenu menu in app.MenuGroups.Item(0).Menus)
             {
                 if (menu.Name == "我的Com菜单")

@@ -19,9 +19,29 @@ namespace AutoCadMyDemo
     /// </summary>
     public partial class Window1 : Window
     {
+
+        private int flag;
+
+        public int Flag{
+            get { return flag; }
+            set { flag = value; }         
+        }
+    
         public Window1()
         {
             InitializeComponent();
+        }
+
+        private void B1_Click(object sender, RoutedEventArgs e)
+        {
+            flag = 1;
+            this.Close();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            flag = 2;
+            this.Close();
         }
     }
 }
