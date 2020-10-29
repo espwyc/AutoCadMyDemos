@@ -13,6 +13,13 @@ namespace AutoCadMyDemo
 {
     public partial class MyCommands
     {
+       
+        private double area;
+        public double Area {
+            get { return area; }
+            set { area = value; }
+        }
+
         [CommandMethod("MyHook")]
         public void MyHook()
         {
@@ -185,11 +192,11 @@ namespace AutoCadMyDemo
             entityList.Add(a4);//第8条弧
 
             //画十字线
-            Point3d[] points = { pt1, pt2, pt3 };
+            Point3d[] points = { pt1, pt2, pt3, pt4};
             foreach (Point3d p in points)
             {
-                Line tmpl1 = new Line(new Point3d(p.X - 30, p.Y, 0),new Point3d(p.X+30,p.Y,0));
-                Line tmpl2 = new Line(new Point3d(p.X , p.Y-30, 0),new Point3d(p.X,p.Y+30,0));
+                Line tmpl1 = new Line(new Point3d(p.X - 20, p.Y, 0),new Point3d(p.X+20,p.Y,0));
+                Line tmpl2 = new Line(new Point3d(p.X , p.Y-20, 0),new Point3d(p.X,p.Y+20,0));
                 //tmpl1.Linetype = "CENTER2";
                 //tmpl2.Linetype = "CENTER2";
                 tmpl1.ColorIndex = 4;
@@ -198,15 +205,191 @@ namespace AutoCadMyDemo
                 centerMarkList.Add(tmpl2);
             }
 
+            //标注
+            //c3直径
+            DiametricDimension d1 = new DiametricDimension();
+            Line tmpl = new Line(c3.Center, new Point3d(c3.Center.X - 1, c3.Center.Y + 1,0));
+            pc.Clear();
+            c3.IntersectWith(tmpl, Intersect.ExtendBoth, pc, new IntPtr(0), new IntPtr(0));
+            d1.ChordPoint = pc[0];
+            d1.FarChordPoint = pc[1];
+            d1.LeaderLength = 20;
+            d1.ColorIndex = 2;
+            MarkList.Add(d1);
 
-            Entity[] es = { c3,l1,l2,l3};
-            //AddEntities(es);
+            //半径
+            RadialDimension r1 = new RadialDimension();
+            Arc tmparc = entityList[0] as Arc;
+            tmpl=new Line(tmparc.Center, new Point3d(tmparc.Center.X + 1, tmparc.Center.Y - 0.5, 0));
+            pc.Clear();
+            tmparc.IntersectWith(tmpl, Intersect.ExtendBoth, pc, new IntPtr(0), new IntPtr(0));
+            r1.Center = tmparc.Center;
+            r1.ChordPoint = pc[1].X>pc[0].X?pc[1]:pc[0];
+            r1.ColorIndex = 2;
+            r1.LeaderLength = -5;
+            MarkList.Add(r1);
+
+            RadialDimension r2 = new RadialDimension();
+            tmparc = entityList[1] as Arc;
+            tmpl = new Line(tmparc.Center, new Point3d(tmparc.Center.X - 1, tmparc.Center.Y - 0.5, 0));
+            pc.Clear();
+            tmparc.IntersectWith(tmpl, Intersect.ExtendBoth, pc, new IntPtr(0), new IntPtr(0));
+            r2.Center = tmparc.Center;
+            r2.ChordPoint = pc[1].X > pc[0].X ? pc[0] : pc[1];
+            r2.ColorIndex = 2;
+            r2.LeaderLength = -30;
+            MarkList.Add(r2);
+
+            RadialDimension r3 = new RadialDimension();
+            tmparc = entityList[2] as Arc;
+            tmpl = new Line(tmparc.Center, new Point3d(tmparc.Center.X + 1, tmparc.Center.Y - 0.2, 0));
+            pc.Clear();
+            tmparc.IntersectWith(tmpl, Intersect.ExtendBoth, pc, new IntPtr(0), new IntPtr(0));
+            r3.Center = tmparc.Center;
+            r3.ChordPoint = pc[1].X > pc[0].X ? pc[0] : pc[1];
+            r3.ColorIndex = 2;
+            MarkList.Add(r3);
+
+            RadialDimension r4 = new RadialDimension();
+            tmparc = entityList[3] as Arc;
+            tmpl = new Line(tmparc.Center, new Point3d(tmparc.Center.X + 0.35, tmparc.Center.Y + 1, 0));
+            pc.Clear();
+            tmparc.IntersectWith(tmpl, Intersect.ExtendBoth, pc, new IntPtr(0), new IntPtr(0));
+            r4.Center = tmparc.Center;
+            r4.ChordPoint = pc[1].X < pc[0].X ? pc[0] : pc[1];
+            r4.ColorIndex = 2;
+            MarkList.Add(r4);
+
+            RadialDimension r5 = new RadialDimension();
+            tmparc = entityList[4] as Arc;
+            tmpl = new Line(tmparc.Center, new Point3d(tmparc.Center.X + 0.35, tmparc.Center.Y + 1, 0));
+            pc.Clear();
+            tmparc.IntersectWith(tmpl, Intersect.ExtendBoth, pc, new IntPtr(0), new IntPtr(0));
+            r5.Center = tmparc.Center;
+            r5.ChordPoint = pc[1].X > pc[0].X ? pc[0] : pc[1];
+            r5.ColorIndex = 2;
+            MarkList.Add(r5);
+
+            RadialDimension r6 = new RadialDimension();
+            tmparc = entityList[5] as Arc;
+            tmpl = new Line(tmparc.Center, new Point3d(tmparc.Center.X + 1, tmparc.Center.Y - 1, 0));
+            pc.Clear();
+            tmparc.IntersectWith(tmpl, Intersect.ExtendBoth, pc, new IntPtr(0), new IntPtr(0));
+            r6.Center = tmparc.Center;
+            r6.ChordPoint = pc[1].X < pc[0].X ? pc[0] : pc[1];
+            r6.ColorIndex = 2;
+            r6.LeaderLength = 20;
+            MarkList.Add(r6);
+
+            RadialDimension r7 = new RadialDimension();
+            tmparc = entityList[6] as Arc;
+            tmpl = new Line(tmparc.Center, new Point3d(tmparc.Center.X + 1, tmparc.Center.Y + 1, 0));
+            pc.Clear();
+            tmparc.IntersectWith(tmpl, Intersect.ExtendBoth, pc, new IntPtr(0), new IntPtr(0));
+            r7.Center = tmparc.Center;
+            r7.ChordPoint = pc[1].X < pc[0].X ? pc[0] : pc[1];
+            r7.ColorIndex = 2;
+            r7.LeaderLength = 20;
+            MarkList.Add(r7);
+
+            RadialDimension r8 = new RadialDimension();
+            tmparc = entityList[7] as Arc;
+            tmpl = new Line(tmparc.Center, new Point3d(tmparc.Center.X - 1, tmparc.Center.Y - 1, 0));
+            pc.Clear();
+            tmparc.IntersectWith(tmpl, Intersect.ExtendBoth, pc, new IntPtr(0), new IntPtr(0));
+            r8.Center = tmparc.Center;
+            r8.ChordPoint = pc[1].X < pc[0].X ? pc[0] : pc[1];
+            r8.ColorIndex = 2;
+            r8.LeaderLength = 20;
+            MarkList.Add(r8);
+
+            //对齐标注1
+            AlignedDimension am1 = new AlignedDimension();
+            am1.XLine1Point = pt1;
+            am1.XLine2Point = new Point3d(5, 0, 0);
+            am1.DimLinePoint = new Point3d(0, -40, 0);
+            am1.ColorIndex = 2;
+            MarkList.Add(am1);
+            
+            //对齐标注2
+            AlignedDimension am2 = new AlignedDimension();
+            am2.XLine1Point = pt1;
+            am2.XLine2Point = new Point3d(0, -3, 0);
+            am2.DimLinePoint = new Point3d(40,0 , 0);
+            am2.ColorIndex = 2;
+            MarkList.Add(am2);
+
+            //对齐标注3
+            AlignedDimension am3 = new AlignedDimension();
+            am3.XLine1Point = pt1;
+            am3.XLine2Point = new Point3d(0, 70, 0);
+            am3.DimLinePoint = new Point3d(70, 30, 0);
+            am3.ColorIndex = 2;
+            MarkList.Add(am3);
+
+            //对齐标注4
+            AlignedDimension am4 = new AlignedDimension();
+            am4.XLine1Point = l1.EndPoint;
+            am4.XLine2Point = l2.EndPoint;
+            am4.DimLinePoint = new Point3d(-60, 0, 0);
+            am4.ColorIndex = 2;
+            MarkList.Add(am4);
+
+            //对齐标注5
+            AlignedDimension am5 = new AlignedDimension();
+            am5.XLine1Point = new Point3d(0,34,0);
+            am5.XLine2Point = new Point3d(-18,34,0);
+            am5.DimLinePoint = new Point3d(0, 8, 0);
+            am5.ColorIndex = 2;
+            MarkList.Add(am5);
+
+            //对齐标注6
+            AlignedDimension am6 = new AlignedDimension();
+            am6.XLine1Point = new Point3d(-25, 70, 0);
+            am6.XLine2Point = new Point3d(-25, 46, 0);
+            am6.DimLinePoint = new Point3d(-50, 0, 0);
+            am6.ColorIndex = 2;
+            MarkList.Add(am6);
+
+            AddEntities(MarkList.ToArray());
+
+            Entity[] es = { c3,  l3 };
+            ////AddEntities(es);
             entityList.AddRange(es);
-            AddEntities(entityList.ToArray());
+            //组成面域
+            DBObjectCollection dbc1 = new DBObjectCollection();
+            foreach (Entity e in entityList)
+            {
+                dbc1.Add(e);
+            }
+            dbc1.Add(c3);
 
+            DBObjectCollection regions = new DBObjectCollection();
+            regions = Region.CreateFromCurves(dbc1);
+            //doc.Editor.WriteMessage("r1{0}", dbc1regions.Count);
+            Region re1 = regions[0] as Region;
+            Region re2 = regions[1] as Region;
+
+            doc.Editor.WriteMessage("r1:{0},r2:{1}", re1.Area,re2.Area);
+
+            double area = re1.Area > re2.Area ?re1.Area-re2.Area:re2.Area-re1.Area;
+            Area = area;
+            doc.Editor.WriteMessage("面积{0}", area);
+
+            //entityList.Clear();
+            //entityList.Add(r1);
+            //entityList.Add(r2);
+
+
+            foreach (Entity e in entityList)
+            {
+                e.ColorIndex = 1;
+            }
+            entityList.Add(l1);
+            entityList.Add(l2);
+            AddEntities(entityList.ToArray());
             AddEntities(centerMarkList.ToArray());
         }
-
 
         //private LinetypeTable GetLinetypeTable()
         //{
@@ -256,7 +439,6 @@ namespace AutoCadMyDemo
             Line l2 = new Line(Pt2, Pt3);
             Line l3 = new Line(Pt1, Pt3);
             Line l4 = new Line(Pt2, Pt4);
-
 
             
             Point3d Pc = new Point3d(500, h / 3, 0);

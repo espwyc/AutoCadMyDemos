@@ -10,6 +10,6 @@
         <ScrollViewer Name="sc" HorizontalAlignment="Left" Height="399" Margin="10,10,0,0" VerticalAlignment="Top" Width="484"/>
         <Button Name="b1" Content="画图案" HorizontalAlignment="Left" VerticalAlignment="Top" Width="91" Margin="513,33,0,0" Height="27" Click="B1_Click"/>
         <Button Name="b2" Content="算面积" HorizontalAlignment="Left" Margin="513,81,0,0" VerticalAlignment="Top" Width="91" Height="23" Click="Button_Click"/>
-        <Label Content="面积：" HorizontalAlignment="Left" Margin="513,144,0,0" VerticalAlignment="Top" Width="199"/>
+        <Label Name="l1" Content="面积：" HorizontalAlignment="Left" Margin="513,144,0,0" VerticalAlignment="Top" Width="199"/>
     </Grid>
 </Window>

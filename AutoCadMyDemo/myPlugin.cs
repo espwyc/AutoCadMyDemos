@@ -18,7 +18,7 @@ namespace AutoCadMyDemo
     // then you should remove this class.
     public class MyPlugin : IExtensionApplication
     {
-
+        public Window1 window = new Window1();
         void IExtensionApplication.Initialize()
         {
             // Add one time initialization here
@@ -38,14 +38,22 @@ namespace AutoCadMyDemo
             // http://msdn2.microsoft.com/en-US/library/7esfatk4.aspx
             // as well as some of the existing AutoCAD managed apps.
 
-            // Initialize your plug-in application here
 
+            // Initialize your plug-in application here
             MyCommands myCommands = new MyCommands();
             myCommands.MyMenu();
             myCommands.MyRibbonTab();
             myCommands.MyHook();
             //myCommands.OpenWindow();
+            myCommands.OpenWindowRequest += MyCommands_OpenWindowRequest;
 
+            
+
+        }
+
+        private void MyCommands_OpenWindowRequest(object sender, string e)
+        {
+            window.ShowDialog();
         }
 
         void IExtensionApplication.Terminate()

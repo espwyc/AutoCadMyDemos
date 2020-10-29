@@ -53,7 +53,6 @@ namespace AutoCadMyDemo
                     menu.RemoveFromMenuBar();
 
             }
-
         }
     }
 }

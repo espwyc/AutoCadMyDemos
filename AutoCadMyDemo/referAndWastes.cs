@@ -129,6 +129,112 @@ namespace AutoCadMyDemo
             }
         }
 
+        [CommandMethod("AddDimensionTextSuffix")]
+        public static void AddDimensionTextSuffix()
+        {
+            // 获取当前数据库
+            Document acDoc = Application.DocumentManager.MdiActiveDocument;
+            Database acCurDb = acDoc.Database;
+            // 启动事务
+            using (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())
+            {
+                // 以读模式打开块表
+                BlockTable acBlkTbl;
+                acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId,
+                OpenMode.ForRead) as BlockTable;
+                // 以写模式打开块表记录 ModelSpace
+                BlockTableRecord acBlkTblRec;
+                acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace],
+                OpenMode.ForWrite) as BlockTableRecord;
+                // 创建对齐标注
+                AlignedDimension acAliDim = new AlignedDimension();
+                acAliDim.XLine1Point = new Point3d(0, 5, 0);
+                acAliDim.XLine2Point = new Point3d(5, 5, 0);
+                acAliDim.DimLinePoint = new Point3d(0, 30, 0);
+                acAliDim.DimensionStyle = acCurDb.Dimstyle;
+                // 将新对象添加到模型空间并进行事务记录
+                acBlkTblRec.AppendEntity(acAliDim);
+                acTrans.AddNewlyCreatedDBObject(acAliDim, true);
+                // 给标注文字添加后缀
+                PromptStringOptions pStrOpts = new PromptStringOptions("");
+                pStrOpts.Message = "\nEnter a new text suffix for the dimension: ";
+                pStrOpts.AllowSpaces = true;
+                PromptResult pStrRes = acDoc.Editor.GetString(pStrOpts);
+                if (pStrRes.Status == PromptStatus.OK)
+                {
+                    acAliDim.Suffix = pStrRes.StringResult;
+                }
+                // 提交修改，注销事务
+                acTrans.Commit();
+            }
+        }
+
+        [CommandMethod("CreateAngularDimension")]
+        public static void CreateAngularDimension()
+        {
+            // 获取当前数据库
+            Document acDoc = Application.DocumentManager.MdiActiveDocument;
+            Database acCurDb = acDoc.Database;
+            // 启动事务
+            using (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())
+            {
+                // 以读模式打开块表
+                BlockTable acBlkTbl;
+                acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId,
+                OpenMode.ForRead) as BlockTable;
+                // 以写模式打开块表记录 ModelSpace
+                BlockTableRecord acBlkTblRec;
+                acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace],
+                OpenMode.ForWrite) as BlockTableRecord;
+                // 建立角度标注
+                LineAngularDimension2 acLinAngDim = new LineAngularDimension2();
+                acLinAngDim.XLine1Start = new Point3d(0, 5, 0);
+                acLinAngDim.XLine1End = new Point3d(1, 7, 0);
+                acLinAngDim.XLine2Start = new Point3d(0, 5, 0);
+                acLinAngDim.XLine2End = new Point3d(1, 3, 0);
+                acLinAngDim.ArcPoint = new Point3d(3, 5, 0);
+                acLinAngDim.DimensionStyle = acCurDb.Dimstyle;
+                // 添加新对象到模型空间和事务中
+                acBlkTblRec.AppendEntity(acLinAngDim);
+                acTrans.AddNewlyCreatedDBObject(acLinAngDim, true);
+                // 提交修改，关闭事务
+                acTrans.Commit();
+            }
+        }
+
+        [CommandMethod("OverrideDimensionText")]
+        public static void OverrideDimensionText()
+        {
+            // 获取当前数据库
+            Document acDoc = Application.DocumentManager.MdiActiveDocument;
+            Database acCurDb = acDoc.Database;
+            // 启动事务
+            using (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())
+            {
+                // 以读模式打开块表
+                BlockTable acBlkTbl;
+                acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId,
+                OpenMode.ForRead) as BlockTable;
+                // 以写模式打开块表记录 ModelSpace
+                BlockTableRecord acBlkTblRec;
+                acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace],
+                OpenMode.ForWrite) as BlockTableRecord;
+                // 创建一个对齐标注
+                AlignedDimension acAliDim = new AlignedDimension();
+                acAliDim.XLine1Point = new Point3d(5, 3, 0);
+                acAliDim.XLine2Point = new Point3d(10, 3, 0);
+                acAliDim.DimLinePoint = new Point3d(7.5, 5, 0);
+                acAliDim.DimensionStyle = acCurDb.Dimstyle;
+                // 改写标注文字
+                acAliDim.DimensionText = "The value is <>";
+                // 将新对象添加到模型空间和事务
+                acBlkTblRec.AppendEntity(acAliDim);
+                acTrans.AddNewlyCreatedDBObject(acAliDim, true);
+                // 提交修改，关闭事务
+                acTrans.Commit();
+            }
+        }
+
         [CommandMethod("CreateCompositeRegions")]
         public static void CreateCompositeRegions()
         {
@@ -164,6 +270,8 @@ namespace AutoCadMyDemo
                 myRegionColl = Region.CreateFromCurves(acDBObjColl);
                 Region acRegion1 = myRegionColl[0] as Region;
                 Region acRegion2 = myRegionColl[1] as Region;
+
+                acDoc.Editor.WriteMessage("r1{0},r2{1}", acRegion1.Area, acRegion2.Area);
                 // 从面域 2 减去面域 1
                 if (acRegion1.Area > acRegion2.Area)
                 {

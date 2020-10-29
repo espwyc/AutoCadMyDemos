@@ -35,10 +35,14 @@ namespace AutoCadMyDemo
 
         //自定义控件
 
+        //自定义事件
+        public delegate void OpenWindowEventHandler(object sender, string e);
+        public event OpenWindowEventHandler OpenWindowRequest;
+
 
         //通用资源
         private AcadApplication app = (AcadApplication)Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication;
-        Document doc = Application.DocumentManager.MdiActiveDocument;
+        private Document doc = Application.DocumentManager.MdiActiveDocument;
 
         //自定义功能组件
         private void WriteMessage(String s)
@@ -66,6 +70,7 @@ namespace AutoCadMyDemo
         [CommandMethod("OpenWindow")]
         public void OpenWindow()
         {
+            //OpenWindowRequest(this,null);
             Window1 w = new Window1();
             // 获取当前数据库，启动事务
             Document acDoc = Application.DocumentManager.MdiActiveDocument;
@@ -74,28 +79,32 @@ namespace AutoCadMyDemo
             {
                 // 以读模式打开块表
                 BlockTable acBlkTbl;
-                acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId,OpenMode.ForRead) as BlockTable;
+                acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId, OpenMode.ForRead) as BlockTable;
                 // 以读模式打开块表记录模型空间
                 BlockTableRecord acBlkTblRec;
-                acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace],OpenMode.ForRead) as BlockTableRecord;
+                acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace], OpenMode.ForRead) as BlockTableRecord;
                 foreach (ObjectId acObjId in acBlkTblRec)
                 {
                     //acDoc.Editor.WriteMessage("\n" + acObjId.ObjectClass.DxfName);
                     //w.tb.Text += "\n" + acObjId.ObjectClass.DxfName;
-                    w.sc.Content+= "\n" + acObjId.ObjectClass.DxfName;
+                    w.sc.Content += "\n" + acObjId.ObjectClass.DxfName;
                 }
             }
 
             w.ShowDialog();
-            if (w.Flag == 1)
-            {
-                MyHook();
-            }
-            if (w.Flag == 2)
-            {
+            //w.Show();
+            //if (w.Flag == 1)
+            //{
+            //    MyHook();
+            //    w.ShowDialog();
+            //}
+            //if (w.Flag == 2)
+            //{
+            //    w.Area = Area;
+            //    w.UpdateArea();
+            //    w.ShowDialog();
+            //}
 
-            }
-              
         }
 
        
@@ -146,42 +155,41 @@ namespace AutoCadMyDemo
 
 
 
-
         // Modal Command with pickfirst selection
-        [CommandMethod("MyGroup", "MyPickFirst", "MyPickFirstLocal", CommandFlags.Modal | CommandFlags.UsePickSet)]
-        public void MyPickFirst() // This method can have any name
-        {
-            PromptSelectionResult result = Application.DocumentManager.MdiActiveDocument.Editor.GetSelection();
-            if (result.Status == PromptStatus.OK)
-            {
-                // There are selected entities
-                // Put your command using pickfirst set code here
-            }
-            else
-            {
-                // There are no selected entities
-                // Put your command code here
-            }
-        }
+        //[CommandMethod("MyGroup", "MyPickFirst", "MyPickFirstLocal", CommandFlags.Modal | CommandFlags.UsePickSet)]
+        //public void MyPickFirst() // This method can have any name
+        //{
+        //    PromptSelectionResult result = Application.DocumentManager.MdiActiveDocument.Editor.GetSelection();
+        //    if (result.Status == PromptStatus.OK)
+        //    {
+        //        // There are selected entities
+        //        // Put your command using pickfirst set code here
+        //    }
+        //    else
+        //    {
+        //        // There are no selected entities
+        //        // Put your command code here
+        //    }
+        //}
 
-        // Application Session Command with localized name
-        [CommandMethod("MyGroup", "MySessionCmd", "MySessionCmdLocal", CommandFlags.Modal | CommandFlags.Session)]
-        public void MySessionCmd() // This method can have any name
-        {
-            // Put your command code here
-        }
+        //// Application Session Command with localized name
+        //[CommandMethod("MyGroup", "MySessionCmd", "MySessionCmdLocal", CommandFlags.Modal | CommandFlags.Session)]
+        //public void MySessionCmd() // This method can have any name
+        //{
+        //    // Put your command code here
+        //}
 
         // LispFunction is similar to CommandMethod but it creates a lisp 
         // callable function. Many return types are supported not just string
         // or integer.
-        [LispFunction("MyLispFunction", "MyLispFunctionLocal")]
-        public int MyLispFunction(ResultBuffer args) // This method can have any name
-        {
-            // Put your command code here
+        //[LispFunction("MyLispFunction", "MyLispFunctionLocal")]
+        //public int MyLispFunction(ResultBuffer args) // This method can have any name
+        //{
+        //    // Put your command code here
 
-            // Return a value to the AutoCAD Lisp Interpreter
-            return 1;
-        }
+        //    // Return a value to the AutoCAD Lisp Interpreter
+        //    return 1;
+        //}
     }
 
 }
