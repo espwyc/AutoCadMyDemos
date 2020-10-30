@@ -298,9 +298,9 @@ namespace AutoCadMyDemo
             pc.Clear();
             tmparc.IntersectWith(tmpl, Intersect.ExtendBoth, pc, new IntPtr(0), new IntPtr(0));
             r8.Center = tmparc.Center;
-            r8.ChordPoint = pc[1].X < pc[0].X ? pc[0] : pc[1];
+            r8.ChordPoint = pc[1].X > pc[0].X ? pc[0] : pc[1];
             r8.ColorIndex = 2;
-            r8.LeaderLength = 20;
+            r8.LeaderLength = 13;
             MarkList.Add(r8);
 
             //对齐标注1
@@ -345,11 +345,24 @@ namespace AutoCadMyDemo
 
             //对齐标注6
             AlignedDimension am6 = new AlignedDimension();
-            am6.XLine1Point = new Point3d(-25, 70, 0);
-            am6.XLine2Point = new Point3d(-25, 46, 0);
+            am6.XLine1Point = new Point3d(-18, 70, 0);
+            am6.XLine2Point = new Point3d(-18, 46, 0);
             am6.DimLinePoint = new Point3d(-50, 0, 0);
             am6.ColorIndex = 2;
             MarkList.Add(am6);
+
+            //角度标注1
+            LineAngularDimension2 lad1 = new LineAngularDimension2();
+            tmpl = new Line(new Point3d(0, 0, 0), new Point3d(0, 1, 0));
+            pc.Clear();
+            tmpl.IntersectWith(l3, Intersect.ExtendBoth, pc, new IntPtr(0), new IntPtr(0));
+            lad1.XLine2Start = pc[0];
+            lad1.XLine2End = pt1;
+            lad1.XLine1Start = l3.EndPoint;
+            lad1.XLine1End = l3.StartPoint;
+            lad1.ArcPoint = new Point3d(10,2,0);
+            lad1.ColorIndex = 2;
+            MarkList.Add(lad1);
 
             AddEntities(MarkList.ToArray());
 
